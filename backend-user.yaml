@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-service
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - image: ghcr.io/raf-si-2025/banka-4-backend/user-service:latest
+        name: user-service
+        resources: {}
+        env:
+        - name: ENV
+          value: "production"
+        - name: PORT
+          value: "8080"
+        - name: GRPC_PORT
+          value: "50051"
+        - name: TRADING_SERVICE_ADDR
+          value: "localhost:50051"
+
+        - name: DB_HOST
+          value: user_service_db
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: postgres
+        - name: DB_PASS
+          value: postgres
+        - name: DB_NAME
+          value: banka_db
+
+        - name: JWT_SECRET
+          value: your_jwt_secret_key
+        - name: JWT_EXPIRY
+          value: "15"
+        - name: REFRESH_EXPIRY_MINUTES
+          value: "10080"
+        - name: FAILED_LOGIN_WINDOW_MINUTES
+          value: "5"
+        - name: MAX_FAILED_LOGINS
+          value: "4"
+
+        - name: SMTP_HOST
+          value: maildev
+        - name: SMTP_PORT
+          value: "1025"
+        - name: SMTP_USER
+          value: rafbanka4@raf.rs
+        - name: SMTP_PASS
+          value: 0
+        - name: EMAIL_FROM
+          value: rafbanka4@raf.rs
+
+        - name: FRONTEND_BASE_URL
+          value: http://localhost:5173
+        - name: BACKEND_BASE_URL
+          value: http://localhost:8080
+
+        - name: BANKING_SERVICE_PORT
+          value: "8081"
+        - name: TRADING_SERVICE_PORT
+          value: "8082"
+        - name: NOTIFICATION_SERVICE_PORT
+          value: "8083"
+        - name: FRONTEND_BASE_URL
+          value: http://localhost:5173
+        - name: BACKEND_BASE_URL
+          value: http://localhost:8080
+        - name: EXCHANGE_RATE_API_KEY
+          value: 1b2e6dbc86b61ad24e3458ea
+        - name: FINNHUB_API_KEY
+          value: d715r3hr01ql6rg1fud0d715r3hr01ql6rg1fudg
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+  namespace: banka-4
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

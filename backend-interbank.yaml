@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-service
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - image: ghcr.io/raf-si-2025/banka-4-backend/interbank-service:latest
+        name: interbank-service
+        resources: {}
+        env:
+        - name: ENV
+          value: "production"
+        - name: PORT
+          value: "8083"
+        - name: INTERBANK_ROUTING_NUBER
+          value: "444"
+          
+        - name: INTERBANK_PEERS_CONFIG_PATH
+          value: "./peers.yaml"
+        - name: "INTERBANK_OUTBOUND_HTTP_TIMEOUT"
+          value: "10000000000" # nanoseconds
+        - name: "INTERBANK_OUTBOX_POLL_INTERVAL"
+          value: "2000000000" # nanoseconds
+        - name: "INTERBANK_OUTBOX_MAX_ATTEMPTS"
+          value: "20"
+
+        - name: DB_HOST
+          value: db-primary.banka-4.svc
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: db-user
+        - name: DB_PASS
+          value: Pw0f6N8oCYG3ss2OWcP5g2WJ
+        - name: DB_NAME
+          value: "user-service-db"
+        - name: DB_SSLMODE
+          value: "prefer"
+
+        - name: FRONTEND_BASE_URL
+          value: http://localhost:5173
+        - name: BACKEND_BASE_URL
+          value: http://localhost:8080
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: interbank-service
+  labels:
+    app: interbank-service
+  namespace: banka-4
+spec:
+  selector:
+    app: interbank-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
