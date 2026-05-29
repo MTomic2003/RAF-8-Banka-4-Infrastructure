@@ -4,6 +4,7 @@ metadata:
   labels:
     app: trading-service
   name: trading-service
+  namespace: banka-4
 spec:
   replicas: 1
   selector:
@@ -46,7 +47,7 @@ spec:
         - name: DB_PASS
           value: Pw0f6N8oCYG3ss2OWcP5g2WJ
         - name: DB_NAME
-          value: "user-service-db"
+          value: "banka_db"
         - name: DB_SSLMODE
           value: "prefer"
 
@@ -56,7 +57,7 @@ spec:
           value: http://localhost:8080
 
         - name: EXCHANGE_RATE_API_KEY
-          value: 1b2e6dbc86b61ad24e3458ea
+          value: "1b2e6dbc86b61ad24e3458ea"
         - name: TAX_ACCOUNT_NUMBER
           value: "444000000000000008"
 status: {}

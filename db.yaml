@@ -50,5 +50,5 @@ spec:
       password:
         type: "AlphaNumeric"
       databases:
-        - user-service-db
+        - "banka_db"
       options: "SUPERUSER"

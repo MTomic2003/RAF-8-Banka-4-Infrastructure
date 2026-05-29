@@ -2,18 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: user-service
-  name: user-service
+    app: banking-service
+  name: banking-service
+  namespace: banka-4
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-service
+      app: banking-service
   strategy: {}
   template:
     metadata:
       labels:
-        app: user-service
+        app: banking-service
     spec:
       containers:
       - image: ghcr.io/raf-si-2025/banka-4-backend/banking-service:latest
@@ -33,7 +34,7 @@ spec:
         - name: USER_SERVICE_BASE_URL
           value: http://localhost:8080
         - name: EXCHANGE_RATE_API_KEY
-          value: 1b2e6dbc86b61ad24e3458ea
+          value: "1b2e6dbc86b61ad24e3458ea"
 
         - name: DB_HOST
           value: db-primary.banka-4.svc
@@ -44,7 +45,7 @@ spec:
         - name: DB_PASS
           value: Pw0f6N8oCYG3ss2OWcP5g2WJ
         - name: DB_NAME
-          value: "user-service-db"
+          value: "banka_db"
         - name: DB_SSLMODE
           value: "prefer"
 
@@ -55,7 +56,7 @@ spec:
         - name: SMTP_USER
           value: rafbanka4@raf.rs
         - name: SMTP_PASS
-          value: 0
+          value: "0"
         - name: EMAIL_FROM
           value: rafbanka4@raf.rs
 

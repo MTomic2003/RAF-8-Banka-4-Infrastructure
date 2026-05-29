@@ -1,19 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: interbank-peers-config
+  namespace: banka-4
+data:
+  # This is the actual file content your application will read
+  peers.yaml: |
+    peers:
+    - routingNumber: 111
+      baseUrl: "http://bank1.local/interbank"
+      ourApiKey: "key-they-issued-to-us"      # sent in X-Api-Key when we call them
+      theirApiKey: "key-we-issued-to-them"    # expected in X-Api-Key when they call us
+      displayName: "Bank 1"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: user-service
-  name: user-service
+    app: interbank-service
+  name: interbank-service
+  namespace: banka-4
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-service
+      app: interbank-service
   strategy: {}
   template:
     metadata:
       labels:
-        app: user-service
+        app: interbank-service
     spec:
       containers:
       - image: ghcr.io/raf-si-2025/banka-4-backend/interbank-service:latest
@@ -24,11 +40,13 @@ spec:
           value: "production"
         - name: PORT
           value: "8083"
+        - name: JWT_SECRET
+          value: your_jwt_secret_key
         - name: INTERBANK_ROUTING_NUBER
           value: "444"
           
         - name: INTERBANK_PEERS_CONFIG_PATH
-          value: "./peers.yaml"
+          value: "/app/config/peers.yaml"
         - name: "INTERBANK_OUTBOUND_HTTP_TIMEOUT"
           value: "10000000000" # nanoseconds
         - name: "INTERBANK_OUTBOX_POLL_INTERVAL"
@@ -45,7 +63,7 @@ spec:
         - name: DB_PASS
           value: Pw0f6N8oCYG3ss2OWcP5g2WJ
         - name: DB_NAME
-          value: "user-service-db"
+          value: "banka_db"
         - name: DB_SSLMODE
           value: "prefer"
 
@@ -53,6 +71,13 @@ spec:
           value: http://localhost:5173
         - name: BACKEND_BASE_URL
           value: http://localhost:8080
+        volumeMounts:
+        - name: interbank-peers-config
+          mountPath: /app/config
+      volumes:
+      - name: interbank-peers-config
+        configMap:
+          name: interbank-peers-config
 status: {}
 ---
 apiVersion: v1

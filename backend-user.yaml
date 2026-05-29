@@ -4,6 +4,7 @@ metadata:
   labels:
     app: user-service
   name: user-service
+  namespace: banka-4
 spec:
   replicas: 1
   selector:
@@ -30,15 +31,17 @@ spec:
           value: "localhost:50051"
 
         - name: DB_HOST
-          value: user_service_db
+          value: db-primary.banka-4.svc
         - name: DB_PORT
           value: "5432"
         - name: DB_USER
-          value: postgres
+          value: db-user
         - name: DB_PASS
-          value: postgres
+          value: Pw0f6N8oCYG3ss2OWcP5g2WJ
         - name: DB_NAME
-          value: banka_db
+          value: "banka_db"
+        - name: DB_SSLMODE
+          value: "prefer"
 
         - name: JWT_SECRET
           value: your_jwt_secret_key
@@ -58,7 +61,7 @@ spec:
         - name: SMTP_USER
           value: rafbanka4@raf.rs
         - name: SMTP_PASS
-          value: 0
+          value: "0"
         - name: EMAIL_FROM
           value: rafbanka4@raf.rs
 
