@@ -28,7 +28,7 @@ spec:
         - name: GRPC_PORT
           value: "50051"
         - name: TRADING_SERVICE_ADDR
-          value: "localhost:50051"
+          value: "trading-service:50053"
 
         - name: DB_HOST
           value: db-primary.banka-4.svc
@@ -66,20 +66,17 @@ spec:
           value: rafbanka4@raf.rs
 
         - name: FRONTEND_BASE_URL
-          value: http://localhost:5173
+          value: https://banka-4.radenkovic.rs
         - name: BACKEND_BASE_URL
-          value: http://localhost:8080
+          value: https://banka-4.radenkovic.rs
 
         - name: BANKING_SERVICE_PORT
           value: "8081"
         - name: TRADING_SERVICE_PORT
           value: "8082"
         - name: NOTIFICATION_SERVICE_PORT
-          value: "8083"
-        - name: FRONTEND_BASE_URL
-          value: http://localhost:5173
-        - name: BACKEND_BASE_URL
-          value: http://localhost:8080
+          value: "8084"
+          
         - name: EXCHANGE_RATE_API_KEY
           value: 1b2e6dbc86b61ad24e3458ea
         - name: FINNHUB_API_KEY
@@ -97,6 +94,11 @@ spec:
   selector:
     app: user-service
   ports:
-    - protocol: TCP
+    - name: api
+      protocol: TCP
       port: 8080
       targetPort: 8080
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051

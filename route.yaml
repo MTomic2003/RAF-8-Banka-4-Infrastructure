@@ -1,0 +1,61 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: banka-4
+  namespace: banka-4
+spec:
+  parentRefs:
+  - name: banka-gw
+    namespace: envoy-gateway-system
+  hostnames:
+  - banka-4.radenkovic.rs
+  rules:
+  - matches:
+    - path: {type: PathPrefix, value: /user-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: user-service
+      port: 8080
+  - matches:
+    - path: {type: PathPrefix, value: /banking-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: banking-service
+      port: 8081
+  - matches:
+    - path: {type: PathPrefix, value: /trading-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: trading-service
+      port: 8082
+  - matches:
+    - path: {type: PathPrefix, value: /interbank-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: interbank-service
+      port: 8083
+  - matches:
+    - path: {type: PathPrefix, value: /}
+    backendRefs:
+    - name: frontend
+      port: 80

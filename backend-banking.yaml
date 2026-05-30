@@ -30,9 +30,9 @@ spec:
         - name: JWT_SECRET
           value: your_jwt_secret_key
         - name: USER_SERVICE_ADDR
-          value: "localhost:50051"
+          value: "user-service:50051"
         - name: USER_SERVICE_BASE_URL
-          value: http://localhost:8080
+          value: http://user-service:8080
         - name: EXCHANGE_RATE_API_KEY
           value: "1b2e6dbc86b61ad24e3458ea"
 
@@ -61,9 +61,9 @@ spec:
           value: rafbanka4@raf.rs
 
         - name: FRONTEND_BASE_URL
-          value: http://localhost:5173
+          value: https://banka-4.radenkovic.rs
         - name: BACKEND_BASE_URL
-          value: http://localhost:8080
+          value: https://banka-4.radenkovic.rs
 
         - name: REDIS_ADDR
           value: "redis:6379"
@@ -86,6 +86,11 @@ spec:
   selector:
     app: banking-service
   ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+    - name: api
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+    - name: grpc
+      protocol: TCP
+      port: 50052
+      targetPort: 50052

@@ -7,11 +7,11 @@ data:
   # This is the actual file content your application will read
   peers.yaml: |
     peers:
-    - routingNumber: 111
-      baseUrl: "http://bank1.local/interbank"
+    - routingNumber: 1111
+      baseUrl: "https://exbanka-1.radenkovic.rs"
       ourApiKey: "key-they-issued-to-us"      # sent in X-Api-Key when we call them
       theirApiKey: "key-we-issued-to-them"    # expected in X-Api-Key when they call us
-      displayName: "Bank 1"
+      displayName: "EXBanka 1"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -66,11 +66,11 @@ spec:
           value: "banka_db"
         - name: DB_SSLMODE
           value: "prefer"
-
+          
         - name: FRONTEND_BASE_URL
-          value: http://localhost:5173
+          value: https://banka-4.radenkovic.rs
         - name: BACKEND_BASE_URL
-          value: http://localhost:8080
+          value: https://banka-4.radenkovic.rs
         volumeMounts:
         - name: interbank-peers-config
           mountPath: /app/config
@@ -91,6 +91,7 @@ spec:
   selector:
     app: interbank-service
   ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+    - name: api
+      protocol: TCP
+      port: 8083
+      targetPort: 8083

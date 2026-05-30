@@ -24,17 +24,17 @@ spec:
         - name: ENV
           value: "production"
         - name: PORT
-          value: "8080"
+          value: "8082"
         - name: GRPC_PORT
-          value: "50051"
+          value: "50053"
         - name: JWT_SECRET
           value: your_jwt_secret_key
         - name: USER_SERVICE_ADDR
-          value: "localhost:50051"
+          value: "user-service:50051"
         - name: USER_SERVICE_BASE_URL
-          value: http://localhost:8080
+          value: http://user-service:8080
         - name: BANKING_SERVICE_ADDR
-          value: "localhost:50052"
+          value: "banking-service:50052"
         - name: FINNHUB_API_KEY
           value: d715r3hr01ql6rg1fud0d715r3hr01ql6rg1fudg
 
@@ -52,9 +52,9 @@ spec:
           value: "prefer"
 
         - name: FRONTEND_BASE_URL
-          value: http://localhost:5173
+          value: https://banka-4.radenkovic.rs
         - name: BACKEND_BASE_URL
-          value: http://localhost:8080
+          value: https://banka-4.radenkovic.rs
 
         - name: EXCHANGE_RATE_API_KEY
           value: "1b2e6dbc86b61ad24e3458ea"
@@ -73,6 +73,11 @@ spec:
   selector:
     app: trading-service
   ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+    - name: api
+      protocol: TCP
+      port: 8082
+      targetPort: 8082
+    - name: grpc
+      protocol: TCP
+      port: 50053
+      targetPort: 50053
