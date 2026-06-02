@@ -55,6 +55,17 @@ spec:
     - name: interbank-service
       port: 8083
   - matches:
+    - path: {type: PathPrefix, value: /email-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: email-service
+      port: 8084
+  - matches:
     - path: {type: PathPrefix, value: /}
     backendRefs:
     - name: frontend
