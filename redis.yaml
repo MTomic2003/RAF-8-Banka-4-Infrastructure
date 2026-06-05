@@ -14,34 +14,11 @@ spec:
         app: redis
     spec:
       containers:
+      - image: redis:7-alpine
+        name: redis
+        ports:
         - name: redis
-          image: redis:7-alpine
-          args: 
-          - "redis-server"
-          - "--save"
-          - ""
-          - "--appendonly"
-          - "no"
-          - "--maxmemory"
-          - "192mb"
-          - "--maxmemory-policy"
-          - "allkeys-lru"
-          ports:
-            - name: redis
-              containerPort: 6379
-          readinessProbe:
-            tcpSocket:
-              port: 6379
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            tcpSocket:
-              port: 6379
-            initialDelaySeconds: 15
-            periodSeconds: 30
-          resources:
-            requests: { cpu: 50m, memory: 64Mi }
-            limits:   { cpu: 200m, memory: 256Mi }
+          containerPort: 6379
 ---
 apiVersion: v1
 kind: Service
@@ -52,7 +29,6 @@ spec:
   selector:
     app: redis
   ports:
-    - name: redis
-      protocol: TCP
-      port: 6379
-      targetPort: 6379 
+  - name: redis
+    port: 6379
+    targetPort: 6379
