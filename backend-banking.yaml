@@ -33,6 +33,10 @@ spec:
           value: "user-service:50051"
         - name: USER_SERVICE_BASE_URL
           value: http://user-service:8080
+        - name: EMAIL_SERVICE_ADDR
+          value: "email-service:50055"
+        - name: INTERBANK_SERVICE_ADDR
+          value: "interbank-service:50054"
         - name: EXCHANGE_RATE_API_KEY
           value: "1b2e6dbc86b61ad24e3458ea"
 
@@ -48,17 +52,6 @@ spec:
           value: "banka_db"
         - name: DB_SSLMODE
           value: "prefer"
-
-        - name: SMTP_HOST
-          value: maildev
-        - name: SMTP_PORT
-          value: "1025"
-        - name: SMTP_USER
-          value: rafbanka4@raf.rs
-        - name: SMTP_PASS
-          value: "0"
-        - name: EMAIL_FROM
-          value: rafbanka4@raf.rs
 
         - name: FRONTEND_BASE_URL
           value: https://banka-4.radenkovic.rs

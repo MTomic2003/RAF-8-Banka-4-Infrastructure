@@ -45,11 +45,10 @@ spec:
           value: "production"
         - name: PORT
           value: "8083"
-        - name: JWT_SECRET
-          value: your_jwt_secret_key
+        - name: GRPC_PORT
+          value: "50054"
         - name: INTERBANK_ROUTING_NUBER
           value: "444"
-          
         - name: INTERBANK_PEERS_CONFIG_PATH
           value: "/app/config/peers.yaml"
         - name: "INTERBANK_OUTBOUND_HTTP_TIMEOUT"
@@ -58,6 +57,16 @@ spec:
           value: "2000000000" # nanoseconds
         - name: "INTERBANK_OUTBOX_MAX_ATTEMPTS"
           value: "20"
+        - name: JWT_SECRET
+          value: your_jwt_secret_key
+        - name: USER_SERVICE_ADDR
+          value: "user-service:50051"
+        - name: TRADING_SERVICE_ADDR
+          value: "trading-service:50053"
+        - name: BANKING_SERVICE_ADDR
+          value: "banking-service:50052"
+        - name: "INTERBANK_DISPLAY_NAME"
+          value: "Banka 4"
 
         - name: DB_HOST
           value: db-primary.banka-4.svc
@@ -100,3 +109,7 @@ spec:
       protocol: TCP
       port: 8083
       targetPort: 8083
+    - name: grpc
+      protocol: TCP
+      port: 50054
+      targetPort: 50054

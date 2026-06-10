@@ -60,6 +60,10 @@ spec:
           value: "1b2e6dbc86b61ad24e3458ea"
         - name: TAX_ACCOUNT_NUMBER
           value: "444000000000000008"
+        - name: EMAIL_SERVICE_ADDR
+          value: "email-service:50055"
+        - name: DIVIDEND_ACCOUNT_NUMBER
+          value: "444000000000000009"
 status: {}
 ---
 apiVersion: v1

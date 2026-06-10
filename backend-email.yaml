@@ -26,18 +26,7 @@ spec:
         - name: PORT
           value: "8084"
         - name: GRPC_PORT
-          value: "50054"
-
-        - name: JWT_SECRET
-          value: your_jwt_secret_key
-        - name: JWT_EXPIRY
-          value: "15"
-        - name: REFRESH_EXPIRY_MINUTES
-          value: "10080"
-        - name: FAILED_LOGIN_WINDOW_MINUTES
-          value: "5"
-        - name: MAX_FAILED_LOGINS
-          value: "4"
+          value: "50055"
 
         - name: SMTP_HOST
           value: maildev
@@ -48,7 +37,7 @@ spec:
         - name: SMTP_PASS
           value: ""
         - name: EMAIL_FROM
-          value: ""
+          value: "banka-4@raf.rs"
 
         - name: FRONTEND_BASE_URL
           value: https://banka-4.radenkovic.rs
@@ -72,5 +61,5 @@ spec:
       targetPort: 8084
     - name: grpc
       protocol: TCP
-      port: 50054
-      targetPort: 50054
+      port: 50055
+      targetPort: 50055

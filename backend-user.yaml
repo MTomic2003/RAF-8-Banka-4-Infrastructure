@@ -29,6 +29,8 @@ spec:
           value: "50051"
         - name: TRADING_SERVICE_ADDR
           value: "trading-service:50053"
+        - name: EMAIL_SERVICE_ADDR
+          value: "email-service:50055"
 
         - name: DB_HOST
           value: db-primary.banka-4.svc
@@ -54,33 +56,10 @@ spec:
         - name: MAX_FAILED_LOGINS
           value: "4"
 
-        - name: SMTP_HOST
-          value: maildev
-        - name: SMTP_PORT
-          value: "1025"
-        - name: SMTP_USER
-          value: rafbanka4@raf.rs
-        - name: SMTP_PASS
-          value: "0"
-        - name: EMAIL_FROM
-          value: rafbanka4@raf.rs
-
         - name: FRONTEND_BASE_URL
           value: https://banka-4.radenkovic.rs
         - name: BACKEND_BASE_URL
           value: https://banka-4.radenkovic.rs
-
-        - name: BANKING_SERVICE_PORT
-          value: "8081"
-        - name: TRADING_SERVICE_PORT
-          value: "8082"
-        - name: NOTIFICATION_SERVICE_PORT
-          value: "8084"
-          
-        - name: EXCHANGE_RATE_API_KEY
-          value: 1b2e6dbc86b61ad24e3458ea
-        - name: FINNHUB_API_KEY
-          value: d715r3hr01ql6rg1fud0d715r3hr01ql6rg1fudg
 status: {}
 ---
 apiVersion: v1
