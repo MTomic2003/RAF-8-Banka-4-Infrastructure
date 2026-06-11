@@ -57,7 +57,7 @@ spec:
           value: https://banka-4.radenkovic.rs
 
         - name: EXCHANGE_RATE_API_KEY
-          value: "1b2e6dbc86b61ad24e3458ea"
+          value: "3f23ebca16c1d03aadb6c32d"
         - name: TAX_ACCOUNT_NUMBER
           value: "444000000000000008"
         - name: EMAIL_SERVICE_ADDR
