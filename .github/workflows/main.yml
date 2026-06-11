@@ -1,0 +1,37 @@
+name: Kubernetes Apply
+run-name: K8s apply for ${{ github.repository }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-k8s:
+    name: Kubernetes deploy ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    needs: docker-build
+    
+    steps:
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d
+        with:
+          version: 'v1.35.5'
+
+      - name: Configure kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Apply to Kubernetes
+        run: |
+          kubectl apply -f db.yaml
+          kubectl apply -f redis.yaml
+          kubectl apply -f backend-user.yaml
+          kubectl apply -f backend-banking.yaml
+          kubectl apply -f backend-trading.yaml
+          kubectl apply -f backend-interbank.yaml
+          kubectl apply -f backend-email.yaml
+          kubectl apply -f route.yaml
+          kubectl apply -f frontend.yaml
