@@ -70,3 +70,24 @@ spec:
     backendRefs:
     - name: frontend
       port: 80
+
+  - matches:
+    - path: {type: Exact, value: /maildev}
+    filters:
+      - type: RequestRedirect
+        requestRedirect:
+          path:
+            type: ReplaceFullPath
+            replaceFullPath: /maildev/
+          statusCode: 301
+  - matches:
+    - path: {type: PathPrefix, value: /maildev/}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: maildev
+      port: 1080

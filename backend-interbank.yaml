@@ -80,7 +80,7 @@ spec:
         - name: DB_USER
           value: db-user
         - name: DB_PASS
-          value: Pw0f6N8oCYG3ss2OWcP5g2WJ
+          value: s4M4AEBhNK6gGEijAmZ8cjvv
         - name: DB_NAME
           value: "banka_db"
         - name: DB_SSLMODE

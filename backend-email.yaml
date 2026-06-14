@@ -29,15 +29,15 @@ spec:
           value: "50055"
 
         - name: SMTP_HOST
-          value: maildev
+          value: maildev.banka-4.svc
         - name: SMTP_PORT
-          value: "587"
+          value: "1025"
         - name: SMTP_USER
-          value: ""
+          value: "rafbanka4@raf.rs"
         - name: SMTP_PASS
           value: ""
         - name: EMAIL_FROM
-          value: "banka-4@raf.rs"
+          value: "rafbanka4@raf.rs"
 
         - name: FRONTEND_BASE_URL
           value: https://banka-4.radenkovic.rs
