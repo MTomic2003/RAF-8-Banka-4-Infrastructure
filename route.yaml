@@ -1,0 +1,93 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: banka-4
+  namespace: banka-4
+spec:
+  parentRefs:
+  - name: banka-gw
+    namespace: envoy-gateway-system
+  hostnames:
+  - banka-4.radenkovic.rs
+  rules:
+  - matches:
+    - path: {type: PathPrefix, value: /user-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: user-service
+      port: 8080
+  - matches:
+    - path: {type: PathPrefix, value: /banking-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: banking-service
+      port: 8081
+  - matches:
+    - path: {type: PathPrefix, value: /trading-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: trading-service
+      port: 8082
+  - matches:
+    - path: {type: PathPrefix, value: /interbank-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: interbank-service
+      port: 8083
+  - matches:
+    - path: {type: PathPrefix, value: /email-service}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: email-service
+      port: 8084
+  - matches:
+    - path: {type: PathPrefix, value: /}
+    backendRefs:
+    - name: frontend
+      port: 80
+
+  - matches:
+    - path: {type: Exact, value: /maildev}
+    filters:
+      - type: RequestRedirect
+        requestRedirect:
+          path:
+            type: ReplaceFullPath
+            replaceFullPath: /maildev/
+          statusCode: 301
+  - matches:
+    - path: {type: PathPrefix, value: /maildev/}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: maildev
+      port: 1080

@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: interbank-peers-config
+  namespace: banka-4
+data:
+  # This is the actual file content your application will read
+  peers.yaml: |
+    peers:
+    - routingNumber: 111
+      baseUrl: "https://exbanka.vlupsic.dev/instance1/api/v3/cross-bank-protocol"
+      ourApiKey: "bank4-secret-key"
+      theirApiKey: "bank4-secret-key"
+      displayName: "Bank 1 (exbanka)"
+    - routingNumber: 333
+      baseUrl: "https://banka.raf-project.com/"
+      ourApiKey:   "bank4-secret-key"
+      theirApiKey: "4CJYwLN/Ec2i5M/J8Anv+Av1O81OGE9re4lG+m9PsEQ="
+      displayName: "Bank 3"
+    - routingNumber: 888
+      baseUrl: "https://exbanka-4.radenkovic.rs/api"
+      ourApiKey: "bank4-secret-key"
+      theirApiKey: "ek_exbanka4_1c715bd146a3ef672b6519349dc3419b2c37f875be0cc10c"
+      displayName: "exBank 4"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: interbank-service
+  name: interbank-service
+  namespace: banka-4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: interbank-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: interbank-service
+    spec:
+      containers:
+      - image: ghcr.io/raf-si-2025/banka-4-backend/interbank-service:latest
+        name: interbank-service
+        resources: {}
+        env:
+        - name: ENV
+          value: "production"
+        - name: PORT
+          value: "8083"
+        - name: GRPC_PORT
+          value: "50054"
+        - name: INTERBANK_ROUTING_NUBER
+          value: "444"
+        - name: INTERBANK_PEERS_CONFIG_PATH
+          value: "/app/config/peers.yaml"
+        - name: "INTERBANK_OUTBOUND_HTTP_TIMEOUT"
+          value: "10000000000" # nanoseconds
+        - name: "INTERBANK_OUTBOX_POLL_INTERVAL"
+          value: "2000000000" # nanoseconds
+        - name: "INTERBANK_OUTBOX_MAX_ATTEMPTS"
+          value: "20"
+        - name: JWT_SECRET
+          value: your_jwt_secret_key
+        - name: USER_SERVICE_ADDR
+          value: "user-service:50051"
+        - name: TRADING_SERVICE_ADDR
+          value: "trading-service:50053"
+        - name: BANKING_SERVICE_ADDR
+          value: "banking-service:50052"
+        - name: "INTERBANK_DISPLAY_NAME"
+          value: "Banka 4"
+
+        - name: DB_HOST
+          value: db-primary.banka-4.svc
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: db-user
+        - name: DB_PASS
+          value: s4M4AEBhNK6gGEijAmZ8cjvv
+        - name: DB_NAME
+          value: "banka_db"
+        - name: DB_SSLMODE
+          value: "prefer"
+          
+        - name: FRONTEND_BASE_URL
+          value: https://banka-4.radenkovic.rs
+        - name: BACKEND_BASE_URL
+          value: https://banka-4.radenkovic.rs
+        volumeMounts:
+        - name: interbank-peers-config
+          mountPath: /app/config
+      volumes:
+      - name: interbank-peers-config
+        configMap:
+          name: interbank-peers-config
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: interbank-service
+  labels:
+    app: interbank-service
+  namespace: banka-4
+spec:
+  selector:
+    app: interbank-service
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8083
+      targetPort: 8083
+    - name: grpc
+      protocol: TCP
+      port: 50054
+      targetPort: 50054

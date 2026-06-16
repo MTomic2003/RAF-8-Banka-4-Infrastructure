@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: trading-service
+  name: trading-service
+  namespace: banka-4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trading-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: trading-service
+    spec:
+      containers:
+      - image: ghcr.io/raf-si-2025/banka-4-backend/trading-service:latest
+        name: trading-service
+        resources: {}
+        env:
+        - name: ENV
+          value: "production"
+        - name: PORT
+          value: "8082"
+        - name: GRPC_PORT
+          value: "50053"
+        - name: JWT_SECRET
+          value: your_jwt_secret_key
+        - name: USER_SERVICE_ADDR
+          value: "user-service:50051"
+        - name: USER_SERVICE_BASE_URL
+          value: http://user-service:8080
+        - name: BANKING_SERVICE_ADDR
+          value: "banking-service:50052"
+        - name: FINNHUB_API_KEY
+          value: d715r3hr01ql6rg1fud0d715r3hr01ql6rg1fudg
+
+        - name: DB_HOST
+          value: db-primary.banka-4.svc
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: db-user
+        - name: DB_PASS
+          value: s4M4AEBhNK6gGEijAmZ8cjvv
+        - name: DB_NAME
+          value: "banka_db"
+        - name: DB_SSLMODE
+          value: "prefer"
+
+        - name: FRONTEND_BASE_URL
+          value: https://banka-4.radenkovic.rs
+        - name: BACKEND_BASE_URL
+          value: https://banka-4.radenkovic.rs
+
+        - name: EXCHANGE_RATE_API_KEY
+          value: "3f23ebca16c1d03aadb6c32d"
+        - name: TAX_ACCOUNT_NUMBER
+          value: "444000000000000008"
+        - name: EMAIL_SERVICE_ADDR
+          value: "email-service:50055"
+        - name: DIVIDEND_ACCOUNT_NUMBER
+          value: "444000000000000009"
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trading-service
+  labels:
+    app: trading-service
+  namespace: banka-4
+spec:
+  selector:
+    app: trading-service
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8082
+      targetPort: 8082
+    - name: grpc
+      protocol: TCP
+      port: 50053
+      targetPort: 50053

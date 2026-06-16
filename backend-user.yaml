@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-service
+  name: user-service
+  namespace: banka-4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - image: ghcr.io/raf-si-2025/banka-4-backend/user-service:latest
+        name: user-service
+        resources: {}
+        env:
+        - name: ENV
+          value: "production"
+        - name: PORT
+          value: "8080"
+        - name: GRPC_PORT
+          value: "50051"
+        - name: TRADING_SERVICE_ADDR
+          value: "trading-service:50053"
+        - name: EMAIL_SERVICE_ADDR
+          value: "email-service:50055"
+
+        - name: DB_HOST
+          value: db-primary.banka-4.svc
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: db-user
+        - name: DB_PASS
+          value: s4M4AEBhNK6gGEijAmZ8cjvv
+        - name: DB_NAME
+          value: "banka_db"
+        - name: DB_SSLMODE
+          value: "prefer"
+
+        - name: JWT_SECRET
+          value: your_jwt_secret_key
+        - name: JWT_EXPIRY
+          value: "15"
+        - name: REFRESH_EXPIRY_MINUTES
+          value: "10080"
+        - name: FAILED_LOGIN_WINDOW_MINUTES
+          value: "5"
+        - name: MAX_FAILED_LOGINS
+          value: "4"
+
+        - name: FRONTEND_BASE_URL
+          value: https://banka-4.radenkovic.rs
+        - name: BACKEND_BASE_URL
+          value: https://banka-4.radenkovic.rs
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+  namespace: banka-4
+spec:
+  selector:
+    app: user-service
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
